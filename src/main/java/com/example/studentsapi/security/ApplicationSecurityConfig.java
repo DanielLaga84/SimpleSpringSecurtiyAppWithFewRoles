@@ -13,6 +13,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         // every request username and password is send you can not logout that is how it works
         http.
                 authorizeRequests()
+                .antMatchers("/", "index","/css/*","/js/*")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
