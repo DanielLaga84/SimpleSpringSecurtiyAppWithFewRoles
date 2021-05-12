@@ -25,6 +25,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // every request username and password is send you can not logout that is how it works
         http.
+                csrf().disable().
                 authorizeRequests()
                 .antMatchers("/", "index","/css/*","/js/*")
                 .permitAll()
@@ -51,7 +52,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails danielUser = User.builder()
                 .username("daniel")
                 .password(passwordEncoder.encode("password123"))
-                .roles(ApplicationUserRole.ADMINTREINEE.name()).build(); // ROLE_ADMIN
+                .roles(ApplicationUserRole.ADMINTREINEE.name()).build(); // ROLE_ADMINTREINEE
 
         return new InMemoryUserDetailsManager(
                 annaSmithUser,
