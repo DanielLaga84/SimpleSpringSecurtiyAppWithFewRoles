@@ -2,7 +2,6 @@ package com.example.studentsapi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -66,7 +65,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails danielUser = User.builder()
                 .username("daniel")
                 .password(passwordEncoder.encode("password123"))
-                .authorities(ADMINTREINEE.getGrantedAuthorities())
+                .authorities(ADMINTRAINEE.getGrantedAuthorities())
 //                .roles(ApplicationUserRole.ADMINTREINEE.name())
                 .build(); // ROLE_ADMINTREINEE
 
