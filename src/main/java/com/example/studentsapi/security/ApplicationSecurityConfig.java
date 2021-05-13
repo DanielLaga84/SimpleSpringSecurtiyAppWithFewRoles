@@ -2,7 +2,6 @@ package com.example.studentsapi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.example.studentsapi.security.ApplicationUserRole.*;
 
@@ -32,18 +32,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // every request username and password is send you can not logout that is how it works
         http.
-                csrf().disable().
-                authorizeRequests()
+//                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()// in non browser using we can disable csrf !!! Otherwise we might be attacked. In correct way to generate TOKEN we use :csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()
+                csrf()
+                .disable()
+                .authorizeRequests()
                 .antMatchers("/", "index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-//                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())//antMatcher to student and gives access to students not admin
-//                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(), ApplicationUserRole.ADMINTREINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
                 .httpBasic();
+
+
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails danielUser = User.builder()
                 .username("daniel")
                 .password(passwordEncoder.encode("password123"))
-                .authorities(ADMINTREINEE.getGrantedAuthorities())
+                .authorities(ADMINTRAINEE.getGrantedAuthorities())
 //                .roles(ApplicationUserRole.ADMINTREINEE.name())
                 .build(); // ROLE_ADMINTREINEE
 
