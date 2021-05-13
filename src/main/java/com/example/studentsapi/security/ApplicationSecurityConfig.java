@@ -32,8 +32,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // every request username and password is send you can not logout that is how it works
         http.
-                // in non browser using we can disable csrf !!! Otherwise we might be attacked.
-                authorizeRequests()
+                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())// in non browser using we can disable csrf !!! Otherwise we might be attacked.
+                .and()
+                .authorizeRequests()
                 .antMatchers("/", "index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
@@ -41,8 +42,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
 
-        http.
-                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
     }
 
     @Override
