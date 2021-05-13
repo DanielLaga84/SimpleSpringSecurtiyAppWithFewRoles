@@ -32,8 +32,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // every request username and password is send you can not logout that is how it works
         http.
-                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())// in non browser using we can disable csrf !!! Otherwise we might be attacked.
-                .and()
+//                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()// in non browser using we can disable csrf !!! Otherwise we might be attacked. In correct way to generate TOKEN we use :csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()
+                csrf()
+                .disable()
                 .authorizeRequests()
                 .antMatchers("/", "index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
