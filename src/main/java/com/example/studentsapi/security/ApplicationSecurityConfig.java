@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -39,6 +40,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //              csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()// in non browser using we can disable csrf !!! Otherwise we might be attacked. In correct way to generate TOKEN we use :csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()
                 csrf()
                 .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/", "index","/css/*","/js/*").permitAll()
