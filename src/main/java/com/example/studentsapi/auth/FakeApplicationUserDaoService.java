@@ -28,27 +28,27 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
     private List<ApplicationUser> getApplicationUsers() {
         List<ApplicationUser> applicationUsers = Lists.newArrayList(
                 new ApplicationUser(
-                        STUDENT.getGrantedAuthorities(),
                         passwordEncoder.encode("password"),
                         "annasmith",
+                        STUDENT.getGrantedAuthorities(),
                         true,
                         true,
                         true,
                         true
                 ),
                 new ApplicationUser(
-                        ADMIN.getGrantedAuthorities(),
                         passwordEncoder.encode("password"),
                         "linda",
+                        ADMIN.getGrantedAuthorities(),
                         true,
                         true,
                         true,
                         true
                 ),
                 new ApplicationUser(
-                        ADMINTRAINEE.getGrantedAuthorities(),
                         passwordEncoder.encode("password"),
                         "daniel",
+                        ADMINTRAINEE.getGrantedAuthorities(),
                         true,
                         true,
                         true,
