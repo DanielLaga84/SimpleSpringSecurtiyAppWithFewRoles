@@ -1,6 +1,7 @@
 package com.example.studentsapi.security;
 
 import com.example.studentsapi.auth.ApplicationUserService;
+import com.example.studentsapi.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,25 +39,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //              csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()// in non browser using we can disable csrf !!! Otherwise we might be attacked. In correct way to generate TOKEN we use :csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()
                 csrf()
                 .disable()
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/", "index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/courses",true).and()
-                .rememberMe().tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
-                .key("somethingverysecured")
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID", "remember-me" )
-                .logoutSuccessUrl("/login");// default 2 weeks;
+                .authenticated();
+
 
     }
 
