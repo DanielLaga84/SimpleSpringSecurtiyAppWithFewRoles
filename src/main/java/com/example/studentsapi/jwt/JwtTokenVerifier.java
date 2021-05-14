@@ -25,7 +25,10 @@ import java.util.stream.Collectors;
 public class JwtTokenVerifier extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authoryzation");
+
+
+        String authorizationHeader = request.getHeader("Authorization");
+
         if (Strings.isNullOrEmpty(authorizationHeader) || authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -34,6 +37,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         try {
 
             String secretKey = "securesecuresecuresecuresecuresecure";
+
             Jws<Claims> claimsJws = Jwts.parser()
                     .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .parseClaimsJws(token);
@@ -43,7 +47,8 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             String username = body.getSubject();
 
             var authorities = (List<Map<String, String>>) body.get("authorities");
-            Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream().map(m -> new SimpleGrantedAuthority(m.get("authority"))).collect(Collectors.toSet());
+            Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities
+                    .stream().map(m -> new SimpleGrantedAuthority(m.get("authority"))).collect(Collectors.toSet());
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     username,
@@ -53,7 +58,8 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (JwtException e) {
-            throw new IllegalStateException(String.format("Token cannot be trusted.",token));
+            throw new IllegalStateException(String.format("Token %s cannot be trusted.",token));
         }
+        filterChain.doFilter(request,response);
     }
 }
