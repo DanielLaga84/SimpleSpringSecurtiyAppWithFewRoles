@@ -1,6 +1,7 @@
 package com.example.studentsapi.jwt;
 
 public class UsernameAndPasswordAuthenticationRequest {
+
     private String username;
     private String password;
 
